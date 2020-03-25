@@ -42,6 +42,7 @@ Help welcome, eg by filling in the entries with `?` `TODO` and `CHECKME`, correc
 | User defined operators | partial: opCall opSlice, opAssign etc | yes | -1 |
 | User defined attributes | yes | ? | ? |
 | RAII | yes (modulo caveats https://github.com/timotheecour/D_vs_nim/issues/27) | no, see: [RAII](https://forum.nim-lang.org/t/362/1) | 1 |
+| prevention of null dereferencing | <p>manual null checks required</p> <p>`null` pointers to class objects can exist. The only way to check for them is to remember to use `if (myObj is null)`. Lessening the impact of this, many built-in types, such as integers, arrays, maps, and struct objects, can never be `null` ([source](https://w0rp.com/blog/post/null-and-d-programming-language/)).</p> | <p>manual null checks required</p> <p>`nil` references and pointers can exist. The standard way to check for them is to remember to use `if myObj.isNil`. Lessening the impact of this, many built-in types can never be `nil`, including `seq`s. However, tables (which are like D’s maps) can be `nil`.</p> <p>Nim also has an experimental `notnil` feature that enables a [`not nil` type annotation](https://nim-lang.org/docs/manual.html#types-not-nil-annotation), e.g. `ref SomeObject not nil`, to ensure that a variable can never hold `nil`. However, it doesn’t seem to be well-supported. The `notnil` feature was made experimental [in 2018](https://github.com/nim-lang/Nim/blob/devel/changelogs/changelog_0_19_0.md#changes-affecting-backwards-compatibility), but in 2020 its [brief documentation](https://nim-lang.org/docs/manual.html#types-not-nil-annotation) is still in the wrong section of the manual, and it has at least one [open bug](https://github.com/nim-lang/Nim/issues/7248) that may let a `nil` dereference error happen with a `not nil` type. `not nil` types are also [not widely used](https://github.com/nim-lang/Nim/pull/3296#issuecomment-138483068) in the standard library even for procs that will never return `nil`, so users must make redundant assertions.</p> | ? |
 | **debugging** |
 | **maturity** |
 | stability | few breaking changes in each release | pre 1.0, new releases often make lots of break changes | 1 |
@@ -135,6 +136,7 @@ See also https://github.com/timotheecour/D_vs_nim/issues/11
 | increment | `i++` | `i+=1` or `inc(i)` |
 | concatenation | `~` | `&` |
 | empty statement | `{}` | `discard` |
+| null pointer | `null` | `nil` |
 | **syntax:parsing** |
 | alias | `alias T2=T;` | ?; template, see https://github.com/nim-lang/Nim/issues/7090 |
 | type alias | `alias T2=T;` | `type T2=T` |
